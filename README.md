@@ -135,7 +135,7 @@ node_js:
 ```
 [TravisCI Node.js Version](https://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
 
-### **AWS Elastic Beanstalk**
+### **AWS Elastic Beanstalk(unverified)**
 Update the Node version in the `platform` configuration via the AWS Management Console or CLI.
 
 - AWS Console: [Link to Console](https://console.aws.amazon.com/elasticbeanstalk/home)
@@ -145,7 +145,7 @@ aws elasticbeanstalk update-environment --environment-name my-env --option-setti
 # https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux.html#platforms-linux.nodejs
 ```
 
-### **Google Cloud Functions**
+### **Google Cloud Functions(unverified)**
 Set `engines.node` in `package.json` as shown in item 1.
 
 - Google Cloud Console: [Link to Console](https://console.cloud.google.com/functions/)
