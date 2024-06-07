@@ -1,45 +1,45 @@
 # Node Upgrade Checklist
-Handy checklist for upgrading to the latest Node Version
+Handy checklist for everywhere and anywhere you might need to set the version when upgrading to the latest Node. 
+
+
+[Fixes and Updates Welcome](https://github.com/ThatGuySam/node-upgrade-checklist/edit/main/README.md)
 
 
 Here's the comprehensive list with code examples, using Node version 22 as the example:
 
-### 1. **`package.json` Engines**
+### **`package.json` Engines**
 ```JavaScript
 // package.json
 {
   "engines": {
-    "node": ">=22.0.0"
+    "node": "22.x"
   }
 }
-// https://docs.npmjs.com/files/package.json#engines
+// https://docs.npmjs.com/cli/configuring-npm/package-json#engines
 ```
 
-### 2. **`.nvmrc`**
+### **`.nvmrc`**
 ```
 // .nvmrc
-22.0.0
+22
 // https://github.com/nvm-sh/nvm#nvmrc
 ```
 
-### 3. **`.node-version`**
+### **`.node-version`**
 ```
 // .node-version
-22.0.0
-// https://github.com/nodenv/nodenv#node-version
+22
+// https://github.com/shadowspawn/node-version-usage
 ```
 
-### 4. **`.npmrc`**
+### **`.npmrc`**
 ```
 // .npmrc
-use-node-version=22.0.0
-// https://docs.npmjs.com/cli/v7/configuring-npm/npmrc
+use-node-version=22
+// https://docs.npmjs.com/cli/configuring-npm/npmrc
 ```
 
-### 5. **Dependency Managers**
-Reminder: Run `npm install` or `yarn install` after updating the Node version to ensure dependencies are compatible.
-
-### 6. **GitHub Actions**
+### **GitHub Actions**
 ```yaml
 # .github/workflows/ci.yml
 jobs:
@@ -49,40 +49,46 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
+          # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs#specifying-the-nodejs-versionz
           node-version: '22'
-      # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 ```
 
-### 7. **Vercel Config**
-```JavaScript
-// vercel.json
-{
-  "build": {
-    "env": {
-      "NODE_VERSION": "22"
-    }
-  }
-}
-// https://vercel.com/docs/project-configuration#project-configuration/build
-```
+### **Dependency Managers**
+Reminder: Run `npm install`, `pnpm install`, etc... after updating the Node version to ensure dependencies are compatible.
 
-### 8. **Netlify Config**
+### **Vercel Build and Serverless Config**
+⭐️ Defaults to Node Version in package.json/engines
+https://vercel.com/docs/project-configuration#project-configuration/build
+[Available Node Versions](https://vercel.com/docs/functions/runtimes/node-js#default-and-available-versions)
+
+### **Netlify Build Config**
+⭐️ Setting .node-version or .nvmrc will override the version set in the Netlify UI. 
 ```toml
 # netlify.toml
-[build.environment]
-  NODE_VERSION = "22"
+[context.production]
+  environment = { NODE_VERSION = "22.0.0" }
 # https://docs.netlify.com/configure-builds/manage-dependencies/#node-js-and-javascript
 ```
+[Netlify TOML file reference](https://docs.netlify.com/configure-builds/file-based-configuration/)
 
-### 9. **Update `@types/node`**
+
+### **Netlify Runtime/Serverless Config**
+Unfortunately, as of June 2024 this can only be set in the Netlify UI. 
+```bash
+AWS_LAMBDA_JS_RUNTIME=nodejs22.x
+```
+[Netlify Runtime Node Version](https://docs.netlify.com/functions/optional-configuration/?fn-language=js#node-js-version-for-runtime-2)
+[Support Lambda Versions](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#w364aac19c29)
+
+
+### **Update `@types/node`**
 ```bash
 npm install --save-dev @types/node@22
-# or
-yarn add --dev @types/node@22
+pnpm add --dev @types/node@22
 # https://www.npmjs.com/package/@types/node
 ```
 
-### 10. **AWS Lambda**
+### **AWS Lambda**
 AWS Lambda uses the `runtime` parameter in the function configuration. Update it via the AWS Management Console or AWS CLI.
 
 - AWS Console: [Link to Console](https://console.aws.amazon.com/lambda/home)
@@ -91,57 +97,45 @@ AWS Lambda uses the `runtime` parameter in the function configuration. Update it
 aws lambda update-function-configuration --function-name my-function --runtime nodejs22.x
 # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
 ```
+[Support Lambda Versions](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#w364aac19c29)
 
-### 11. **Netlify Function Runtime ENV Variable**
-```toml
-# netlify.toml
-[functions.environment]
-  NODE_VERSION = "22"
-# https://docs.netlify.com/functions/optional-configuration/?fn-language=ts#node-js-version-for-runtime
-```
-
-### 12. **Dockerfile**
+### **Dockerfile**
 ```dockerfile
 # Dockerfile
 FROM node:22
 # https://docs.docker.com/samples/node/
 ```
 
-### 13. **Heroku**
-- Set `engines.node` in `package.json` as shown in item 1.
-- Set `NODE_VERSION` environment variable via the Heroku Dashboard or CLI.
+### **Heroku**
+To specify the version of Node.js to use on Heroku, use the engines section of the package.json. Drop the v to save only the version number.
+[Heroku Node.js Version](https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version)
 
-- Heroku Dashboard: [Link to Dashboard](https://dashboard.heroku.com/)
-- Heroku CLI:
-```bash
-heroku config:set NODE_VERSION=22
-# https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version
-```
-
-### 14. **CircleCI**
+### **CircleCI**
 ```yaml
 # .circleci/config.yml
 version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:22
+      - image: circleci/node@5
     steps:
       - checkout
-      - run: npm install
-# https://circleci.com/docs/2.0/language-javascript/
+      - node/install:
+          node-version: '22'
 ```
+[CircleCI Node.js Version](https://circleci.com/docs/language-javascript/)
 
-### 15. **TravisCI**
+### **TravisCI**
+⭐️ If you don't specify a Node version, Travis CI will use the default to the version set in `.nvmrc`
 ```yaml
 # .travis.yml
 language: node_js
 node_js:
   - "22"
-# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
 ```
+[TravisCI Node.js Version](https://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
 
-### 16. **AWS Elastic Beanstalk**
+### **AWS Elastic Beanstalk**
 Update the Node version in the `platform` configuration via the AWS Management Console or CLI.
 
 - AWS Console: [Link to Console](https://console.aws.amazon.com/elasticbeanstalk/home)
@@ -151,7 +145,7 @@ aws elasticbeanstalk update-environment --environment-name my-env --option-setti
 # https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux.html#platforms-linux.nodejs
 ```
 
-### 17. **Google Cloud Functions**
+### **Google Cloud Functions**
 Set `engines.node` in `package.json` as shown in item 1.
 
 - Google Cloud Console: [Link to Console](https://console.cloud.google.com/functions/)
