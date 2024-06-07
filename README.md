@@ -5,7 +5,7 @@ Handy checklist for upgrading to the latest Node Version
 Here's the comprehensive list with code examples, using Node version 22 as the example:
 
 ### 1. **`package.json` Engines**
-```json
+```JSON with Comments
 // package.json
 {
   "engines": {
@@ -54,7 +54,7 @@ jobs:
 ```
 
 ### 7. **Vercel Config**
-```json
+```JSON with Comments
 // vercel.json
 {
   "build": {
