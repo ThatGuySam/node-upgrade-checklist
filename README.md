@@ -19,6 +19,7 @@ Here's the comprehensive list with code examples, using Node version 24 as the e
 ```
 
 ### **`.nvmrc`**
+Works for [CloudFlare Pages](https://developers.cloudflare.com/pages/configuration/build-image/#languages-and-runtime) and [Netlify](https://docs.netlify.com/configure-builds/manage-dependencies/)
 ```
 // .nvmrc
 24
@@ -26,6 +27,7 @@ Here's the comprehensive list with code examples, using Node version 24 as the e
 ```
 
 ### **`.node-version`**
+Works for [CloudFlare Pages](https://developers.cloudflare.com/pages/configuration/build-image/#languages-and-runtime) and [Netlify](https://docs.netlify.com/configure-builds/manage-dependencies/)
 ```
 // .node-version
 24
