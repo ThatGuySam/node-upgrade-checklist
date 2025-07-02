@@ -47,9 +47,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node.js
+        # Docs - https://github.com/actions/setup-node
         uses: actions/setup-node@v2
         with:
           # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs#specifying-the-nodejs-versionz
+          # It also admits such aliases as lts/*, latest, nightly and canary builds
+          # This means less maintenance if you don't like manually updating versions
+          # Examples: 12.x, 10.15.1, >=10.15.0, lts/Hydrogen, 16-nightly, latest, node
           node-version: '24'
 ```
 
